@@ -1,1 +1,1 @@
-Trying to fine-tune the GPT2 model from open source but the text summary was too long for the GPT model to process (more than 1024 tokens), we tried to exract some key sentences out for model training. 
+Trying to fine-tune the GPT2 model from open source but the text summary was too long for the GPT model to process (more than 1024 tokens), we tried to exract some key sentences out for model training.
