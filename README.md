@@ -9,3 +9,43 @@ We were given data as follows, with some basic information of the 472 different 
 
 ## Task
 The original task was to train an NLP model to read the 'summary' column and make classification prediction regarding the 'Ivestment Strategy', but out of curiousity, we tried to pull off the Language Model trick because it makes the task look a lot fancier! And after some online research, we saw the GPT-2 model being available in open source, so we were able to fine-tune that with our current data and classify with it. 
+
+## Procedures
+Because the task is all about predicting the type with summary, we extracted the two columns out. 
+![image](https://github.com/ThomasK1018/GPT-Classification/assets/69462048/0f94a8ec-1c65-4f77-a69b-395b694f2d19)
+
+We then built the GPT-2 neural network:
+```
+model = TFGPT2Model.from_pretrained("gpt2", use_cache=False,
+        pad_token_id=tokenizer.pad_token_id,
+        eos_token_id=tokenizer.eos_token_id)
+model.training = True
+model.resize_token_embeddings(len(tokenizer))
+
+for layer in model.layers:
+    layer.trainable = False
+
+input = tf.keras.layers.Input(shape=(None,), dtype='int32')
+mask = tf.keras.layers.Input(shape=(None,), dtype='int32')
+x = model(input, attention_mask=mask)
+x = tf.reduce_mean(x.last_hidden_state, axis=1)
+x = tf.keras.layers.Dense(16, activation='relu')(x)
+x = tf.keras.layers.Dropout(0.3)(x)
+output = tf.keras.layers.Dense(3, activation='softmax')(x)
+
+clf = tf.keras.Model([input, mask], output)
+
+base_learning_rate = 0.0005
+optimizer=tf.keras.optimizers.Adam(learning_rate=base_learning_rate)
+loss=tf.keras.losses.SparseCategoricalCrossentropy()
+
+clf.compile(optimizer=optimizer, loss=loss, metrics=['accuracy'])
+
+callbacks = tf.keras.callbacks.EarlyStopping(
+        monitor="accuracy", verbose=1, patience=3, restore_best_weights=True)
+
+history = clf.fit([X_train_in, X_train_mask], y_train_in, epochs=30, batch_size=32, validation_split=0.2, callbacks=callbacks)
+```
+
+## Result
+
