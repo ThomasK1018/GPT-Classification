@@ -48,9 +48,13 @@ history = clf.fit([X_train_in, X_train_mask], y_train_in, epochs=30, batch_size=
 ```
 
 ## Result
+
 ![image](https://github.com/ThomasK1018/GPT-Classification/assets/69462048/80f4286a-2056-48c8-917a-97a663934a29)
+
 The overall F1-score looks fine, but it's mainly due to a large ratio in the equity class. If we look into the confusion table, we will see the following:
+
 ![image](https://github.com/ThomasK1018/GPT-Classification/assets/69462048/2c6b3268-1565-46f8-bced-226b1255cd74)
+
 It looks like the GPT-2 model needs further fine-tuning for the classification task.
 
 
