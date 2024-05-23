@@ -1,0 +1,1 @@
+Trying to fine-tune the GPT2 model from open source to work on my school project. Because we have a very long text summary for input that the GPT model cannot process (more than 1024 tokens), we decided to extract some key sentences out for model training. 
